@@ -8,6 +8,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
+// TorrentCollector has a transmission.Client to create torrent metrics
 type TorrentCollector struct {
 	client   *transmission.Client
 	Status   *prometheus.Desc
@@ -19,6 +20,7 @@ type TorrentCollector struct {
 	Upload   *prometheus.Desc
 }
 
+// NewTorrentCollector creates a new torrent collector with the transmission.Client
 func NewTorrentCollector(client *transmission.Client) *TorrentCollector {
 	return &TorrentCollector{
 		client: client,
@@ -68,10 +70,12 @@ func NewTorrentCollector(client *transmission.Client) *TorrentCollector {
 	}
 }
 
+// Describe implements the prometheus.Collector interface
 func (tc *TorrentCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- tc.Ratio
 }
 
+// Collect implements the prometheus.Collector interface
 func (tc *TorrentCollector) Collect(ch chan<- prometheus.Metric) {
 	log.Println("fetching torrents...")
 	torrents, err := tc.client.GetTorrents()

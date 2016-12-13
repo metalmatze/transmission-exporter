@@ -1,7 +1,7 @@
 package transmission
 
 type (
-	//Torrent represents a transmission torrent
+	// Torrent represents a transmission torrent
 	Torrent struct {
 		ID            int     `json:"id"`
 		Name          string  `json:"name"`
@@ -21,9 +21,13 @@ type (
 		ErrorString   string  `json:"errorString"`
 	}
 
-	ByID    []Torrent
-	ByName  []Torrent
-	ByDate  []Torrent
+	// ByID implements the sort Interface to sort by ID
+	ByID []Torrent
+	// ByName implements the sort Interface to sort by Name
+	ByName []Torrent
+	// ByDate implements the sort Interface to sort by Date
+	ByDate []Torrent
+	// ByRatio implements the sort Interface to sort by Ratio
 	ByRatio []Torrent
 )
 

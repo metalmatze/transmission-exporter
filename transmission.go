@@ -11,10 +11,12 @@ import (
 const endpoint = "/transmission/rpc"
 
 type (
+	// User to authenticate with Transmission
 	User struct {
 		Username string
 		Password string
 	}
+	// Client connects to transmission via HTTP
 	Client struct {
 		URL   string
 		token string
@@ -24,7 +26,7 @@ type (
 	}
 )
 
-//New create new transmission torrent
+// New create new transmission torrent
 func New(url string, user *User) *Client {
 	return &Client{
 		URL:  url + endpoint,
@@ -102,6 +104,7 @@ func (c *Client) authRequest(method string, body []byte) (*http.Request, error) 
 	return req, nil
 }
 
+// ExecuteCommand sends the RPCCommand to Transmission and get the response
 func (c *Client) ExecuteCommand(cmd *RPCCommand) (*RPCCommand, error) {
 	var out RPCCommand
 
@@ -123,8 +126,8 @@ func (c *Client) ExecuteCommand(cmd *RPCCommand) (*RPCCommand, error) {
 	return &out, nil
 }
 
-//GetTorrents get a list of torrents
-func (ac *Client) GetTorrents() ([]Torrent, error) {
+// GetTorrents get a list of torrents
+func (c *Client) GetTorrents() ([]Torrent, error) {
 	cmd := &RPCCommand{
 		Method: "torrent-get",
 		Arguments: RPCArguments{
@@ -149,7 +152,7 @@ func (ac *Client) GetTorrents() ([]Torrent, error) {
 		},
 	}
 
-	out, err := ac.ExecuteCommand(cmd)
+	out, err := c.ExecuteCommand(cmd)
 	if err != nil {
 		return nil, err
 	}

@@ -9,5 +9,5 @@ pipeline:
       - apk add -U git make
       - make fmt
       - make vet
-#      - make lint
+      - make lint
       - make build
