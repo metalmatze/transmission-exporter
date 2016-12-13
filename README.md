@@ -1,4 +1,5 @@
-# Transmission Exporter for Prometheus
+# Transmission Exporter for Prometheus [![Build Status](https://drone.github.matthiasloibl.com/api/badges/metalmatze/transmission-exporter/status.svg)](https://drone.github.matthiasloibl.com/metalmatze/transmission-exporter)
+
 Prometheus exporter for [Transmission](https://transmissionbt.com/) metrics, written in Go.
 
 ### Installation
@@ -19,3 +20,5 @@ For development we encourage you to use `make install` instead, it's faster.
 ### Original authors of the Transmission package  
 Tobias Blom (https://github.com/tubbebubbe/transmission)  
 Long Nguyen (https://github.com/longnguyen11288/go-transmission)
+
+
