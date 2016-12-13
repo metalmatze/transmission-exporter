@@ -14,7 +14,7 @@ pipeline:
 
   docker:
     image: plugins/docker
-    repo: transmission-exporter
+    repo: metalmatze/transmission-exporter
     tags:
       - latest
     when:
