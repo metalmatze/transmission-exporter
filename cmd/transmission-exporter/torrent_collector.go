@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"strconv"
 
 	transmission "github.com/metalmatze/transmission-exporter"
@@ -77,7 +76,6 @@ func (tc *TorrentCollector) Describe(ch chan<- *prometheus.Desc) {
 
 // Collect implements the prometheus.Collector interface
 func (tc *TorrentCollector) Collect(ch chan<- prometheus.Metric) {
-	log.Println("fetching torrents...")
 	torrents, err := tc.client.GetTorrents()
 	if err != nil {
 		return
