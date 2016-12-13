@@ -6,7 +6,7 @@ type (
 		ID            int     `json:"id"`
 		Name          string  `json:"name"`
 		Status        int     `json:"status"`
-		Date          int     `json:"addedDate"`
+		Added         int     `json:"addedDate"`
 		LeftUntilDone int     `json:"leftUntilDone"`
 		Eta           int     `json:"eta"`
 		UploadRatio   float64 `json:"uploadRatio"`
@@ -37,7 +37,7 @@ func (t ByName) Less(i, j int) bool { return t[i].Name < t[j].Name }
 
 func (t ByDate) Len() int           { return len(t) }
 func (t ByDate) Swap(i, j int)      { t[i], t[j] = t[j], t[i] }
-func (t ByDate) Less(i, j int) bool { return t[i].Date < t[j].Date }
+func (t ByDate) Less(i, j int) bool { return t[i].Added < t[j].Added }
 
 func (t ByRatio) Len() int           { return len(t) }
 func (t ByRatio) Swap(i, j int)      { t[i], t[j] = t[j], t[i] }

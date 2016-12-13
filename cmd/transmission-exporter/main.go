@@ -1,45 +1,35 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"os"
-	"sort"
-	"text/tabwriter"
-	"time"
+	"net/http"
 
 	transmission "github.com/metalmatze/transmission-exporter"
+	"github.com/prometheus/client_golang/prometheus"
+)
+
+const (
+	path string = "/metrics"
+	addr string = ":19091"
 )
 
 func main() {
+	log.Println("starting transmission-exporter")
+
 	client := transmission.New("http://localhost:9091", nil)
 
-	for {
-		torrents, err := client.GetTorrents()
-		if err != nil {
-			log.Fatal(err)
-		}
+	prometheus.MustRegister(NewTorrentCollector(client))
 
-		sort.Sort(sort.Reverse(transmission.ByRatio(torrents)))
-		//sort.Sort(sort.Reverse(transmission.ByDate(torrents)))
+	http.Handle(path, prometheus.Handler())
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(`<html>
+			<head><title>Node Exporter</title></head>
+			<body>
+			<h1>Transmission Exporter</h1>
+			<p><a href="` + path + `">Metrics</a></p>
+			</body>
+			</html>`))
+	})
 
-		print("\033[H\033[2J")
-		w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', 0)
-
-		fmt.Fprintln(w, "Name\tRatio\tUp\tDown\tPercent\tDate")
-		for _, t := range torrents {
-			fmt.Fprintf(w,
-				"%s\t%f\t%d\t%d\t%f\t%v\n",
-				t.Name,
-				t.UploadRatio,
-				t.RateUpload,
-				t.RateDownload,
-				t.PercentDone,
-				time.Unix(int64(t.Date), 0),
-			)
-		}
-		w.Flush()
-
-		time.Sleep(time.Second)
-	}
+	log.Fatal(http.ListenAndServe(addr, nil))
 }

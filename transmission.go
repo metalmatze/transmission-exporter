@@ -25,8 +25,8 @@ type (
 )
 
 //New create new transmission torrent
-func New(url string, user *User) Client {
-	return Client{
+func New(url string, user *User) *Client {
+	return &Client{
 		URL:  url + endpoint,
 		User: user,
 	}
