@@ -9,6 +9,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
+// Config gets its content from env and passes it on to different packages
 type Config struct {
 	WebPath              string `arg:"env:WEB_PATH"`
 	WebAddr              string `arg:"env:WEB_ADDR"`
