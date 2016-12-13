@@ -1,0 +1,13 @@
+workspace:
+  base: /go
+  path: src/github.com/metalmatze/transmission-exporter
+
+pipeline:
+  build:
+    image: golang:alpine
+    commands:
+      - apk add -U git make
+      - make fmt
+      - make vet
+#      - make lint
+      - make build
