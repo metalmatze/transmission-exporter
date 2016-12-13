@@ -1,5 +1,4 @@
 /transmission-exporter
-vendor/
 
 *.o
 *.a
