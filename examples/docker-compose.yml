@@ -1,0 +1,16 @@
+transmission:
+  image: linuxserver/transmission
+  restart: always
+  ports:
+    - "127.0.0.1:9091:9091"
+    - "51413:51413"
+    - "51413:51413/udp"
+transmission-exporter:
+  image: metalmatze/transmission-exporter
+  restart: always
+  links:
+    - transmission
+  ports:
+    - "127.0.0.1:19091:19091"
+  environment:
+    TRANSMISSION_ADDR: http://transmission:9091
