@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	arg "github.com/alexflint/go-arg"
+	"github.com/joho/godotenv"
 	transmission "github.com/metalmatze/transmission-exporter"
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -20,6 +21,11 @@ type Config struct {
 
 func main() {
 	log.Println("starting transmission-exporter")
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("no .env present")
+	}
 
 	c := Config{
 		WebPath:          "/metrics",

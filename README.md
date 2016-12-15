@@ -19,12 +19,6 @@ ENV Variable | Description
 | TRANSMISSION_USERNAME | Transmission username, no default |
 | TRANSMISSION_PASSWORD | Transmission password, no default |
 
-### Build
-
-    make
-
-For development we encourage you to use `make install` instead, it's faster. 
-
 ### Docker
 
     docker pull metalmatze/transmission-exporter
@@ -49,6 +43,14 @@ Example `docker-compose.yml` with Transmission also running in docker.
       environment:
         TRANSMISSION_ADDR: http://transmission:9091
 
+### Development
+
+    make
+
+For development we encourage you to use `make install` instead, it's faster.
+
+Now simply copy the `.env.example` to `.env`, like `cp .env.example .env` and set your preferences.
+Now you're good to go.
 
 ### Original authors of the Transmission package  
 Tobias Blom (https://github.com/tubbebubbe/transmission)  
