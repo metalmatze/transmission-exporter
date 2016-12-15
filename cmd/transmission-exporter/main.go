@@ -29,7 +29,15 @@ func main() {
 
 	arg.MustParse(&c)
 
-	client := transmission.New(c.TransmissionAddr, nil)
+	var user *transmission.User
+	if c.TransmissionUsername != "" && c.TransmissionPassword != "" {
+		user = &transmission.User{
+			Username: c.TransmissionUsername,
+			Password: c.TransmissionPassword,
+		}
+	}
+
+	client := transmission.New(c.TransmissionAddr, user)
 
 	prometheus.MustRegister(NewTorrentCollector(client))
 

@@ -20,3 +20,20 @@ pipeline:
     when:
       event: [ push ]
       branch: [ master ]
+
+  docker:
+    image: plugins/docker
+    repo: metalmatze/transmission-exporter
+    tags:
+      - develop
+    when:
+      event: [ push ]
+      branch: [ develop ]
+
+  docker:
+    image: plugins/docker
+    repo: metalmatze/transmission-exporter
+    tags: [ '${TAG}' ]
+    when:
+      event: [ tag ]
+      branch: [ refs/tags/* ]
