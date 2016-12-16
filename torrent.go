@@ -80,22 +80,22 @@ type (
 
 	// Peer of a torrent
 	Peer struct {
-		Address            string `json:"address"`
-		ClientIsChoked     bool   `json:"clientIsChoked"`
-		ClientIsInterested bool   `json:"clientIsInterested"`
-		ClientName         string `json:"clientName"`
-		FlagStr            string `json:"flagStr"`
-		IsDownloadingFrom  bool   `json:"isDownloadingFrom"`
-		IsEncrypted        bool   `json:"isEncrypted"`
-		IsIncoming         bool   `json:"isIncoming"`
-		IsUTP              bool   `json:"isUTP"`
-		IsUploadingTo      bool   `json:"isUploadingTo"`
-		PeerIsChoked       bool   `json:"peerIsChoked"`
-		PeerIsInterested   bool   `json:"peerIsInterested"`
-		Port               int    `json:"port"`
-		Progress           int    `json:"progress"`
-		RateToClient       int    `json:"rateToClient"`
-		RateToPeer         int    `json:"rateToPeer"`
+		Address            string  `json:"address"`
+		ClientIsChoked     bool    `json:"clientIsChoked"`
+		ClientIsInterested bool    `json:"clientIsInterested"`
+		ClientName         string  `json:"clientName"`
+		FlagStr            string  `json:"flagStr"`
+		IsDownloadingFrom  bool    `json:"isDownloadingFrom"`
+		IsEncrypted        bool    `json:"isEncrypted"`
+		IsIncoming         bool    `json:"isIncoming"`
+		IsUTP              bool    `json:"isUTP"`
+		IsUploadingTo      bool    `json:"isUploadingTo"`
+		PeerIsChoked       bool    `json:"peerIsChoked"`
+		PeerIsInterested   bool    `json:"peerIsInterested"`
+		Port               int     `json:"port"`
+		Progress           float64 `json:"progress"`
+		RateToClient       int     `json:"rateToClient"`
+		RateToPeer         int     `json:"rateToPeer"`
 	}
 )
 
