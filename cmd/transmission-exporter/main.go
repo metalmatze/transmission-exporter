@@ -12,11 +12,11 @@ import (
 
 // Config gets its content from env and passes it on to different packages
 type Config struct {
-	WebPath              string `arg:"env:WEB_PATH"`
-	WebAddr              string `arg:"env:WEB_ADDR"`
 	TransmissionAddr     string `arg:"env:TRANSMISSION_ADDR"`
-	TransmissionUsername string `arg:"env:TRANSMISSION_USERNAME"`
 	TransmissionPassword string `arg:"env:TRANSMISSION_PASSWORD"`
+	TransmissionUsername string `arg:"env:TRANSMISSION_USERNAME"`
+	WebAddr              string `arg:"env:WEB_ADDR"`
+	WebPath              string `arg:"env:WEB_PATH"`
 }
 
 func main() {
@@ -48,6 +48,7 @@ func main() {
 	prometheus.MustRegister(NewTorrentCollector(client))
 
 	http.Handle(c.WebPath, prometheus.Handler())
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`<html>
 			<head><title>Node Exporter</title></head>
