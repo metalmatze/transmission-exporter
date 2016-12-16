@@ -148,6 +148,11 @@ func (c *Client) GetTorrents() ([]Torrent, error) {
 				"seedRatioMode",
 				"error",
 				"errorString",
+				"files",
+				"fileStats",
+				"peers",
+				"trackers",
+				"trackerStats",
 			},
 		},
 	}
