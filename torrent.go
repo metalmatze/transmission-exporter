@@ -34,18 +34,21 @@ type (
 	// ByRatio implements the sort Interface to sort by Ratio
 	ByRatio []Torrent
 
+	// File is a file contained inside a torrent
 	File struct {
 		BytesCompleted int    `json:"bytesCompleted"`
 		Length         int    `json:"length"`
 		Name           string `json:"name"`
 	}
 
+	// FileStat describe a file's priority & if it's wanted
 	FileStat struct {
 		BytesCompleted int  `json:"bytesCompleted"`
 		Priority       int  `json:"priority"`
 		Wanted         bool `json:"wanted"`
 	}
 
+	// TrackerStat has stats about the torrent's tracker
 	TrackerStat struct {
 		Announce              string `json:"announce"`
 		AnnounceState         int    `json:"announceState"`
@@ -75,6 +78,7 @@ type (
 		Tier                  int    `json:"tier"`
 	}
 
+	// Peer of a torrent
 	Peer struct {
 		Address            string `json:"address"`
 		ClientIsChoked     bool   `json:"clientIsChoked"`
