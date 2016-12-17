@@ -1,6 +1,30 @@
 package transmission
 
 type (
+	// TorrentCommand is the root command to interact with Transmission via RPC
+	TorrentCommand struct {
+		Method    string           `json:"method,omitempty"`
+		Arguments TorrentArguments `json:"arguments,omitempty"`
+		Result    string           `json:"result,omitempty"`
+	}
+	// TorrentArguments specifies the TorrentCommand in more detail
+	TorrentArguments struct {
+		Fields       []string              `json:"fields,omitempty"`
+		Torrents     []Torrent             `json:"torrents,omitempty"`
+		Ids          []int                 `json:"ids,omitempty"`
+		DeleteData   bool                  `json:"delete-local-data,omitempty"`
+		DownloadDir  string                `json:"download-dir,omitempty"`
+		MetaInfo     string                `json:"metainfo,omitempty"`
+		Filename     string                `json:"filename,omitempty"`
+		TorrentAdded TorrentArgumentsAdded `json:"torrent-added"`
+	}
+	// TorrentArgumentsAdded specifies the torrent to get added data from
+	TorrentArgumentsAdded struct {
+		HashString string `json:"hashString"`
+		ID         int    `json:"id"`
+		Name       string `json:"name"`
+	}
+
 	// Torrent represents a transmission torrent
 	Torrent struct {
 		ID            int           `json:"id"`

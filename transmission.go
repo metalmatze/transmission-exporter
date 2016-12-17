@@ -104,33 +104,11 @@ func (c *Client) authRequest(method string, body []byte) (*http.Request, error) 
 	return req, nil
 }
 
-// ExecuteCommand sends the RPCCommand to Transmission and get the response
-func (c *Client) ExecuteCommand(cmd *RPCCommand) (*RPCCommand, error) {
-	var out RPCCommand
-
-	body, err := json.Marshal(&cmd)
-	if err != nil {
-		return nil, err
-	}
-
-	output, err := c.post(body)
-	if err != nil {
-		return nil, err
-	}
-
-	err = json.Unmarshal(output, &out)
-	if err != nil {
-		return nil, err
-	}
-
-	return &out, nil
-}
-
 // GetTorrents get a list of torrents
 func (c *Client) GetTorrents() ([]Torrent, error) {
-	cmd := &RPCCommand{
+	cmd := TorrentCommand{
 		Method: "torrent-get",
-		Arguments: RPCArguments{
+		Arguments: TorrentArguments{
 			Fields: []string{
 				"id",
 				"name",
@@ -157,8 +135,18 @@ func (c *Client) GetTorrents() ([]Torrent, error) {
 		},
 	}
 
-	out, err := c.ExecuteCommand(cmd)
+	req, err := json.Marshal(&cmd)
 	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.post(req)
+	if err != nil {
+		return nil, err
+	}
+
+	var out TorrentCommand
+	if err := json.Unmarshal(resp, &out); err != nil {
 		return nil, err
 	}
 
