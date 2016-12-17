@@ -155,8 +155,6 @@ func (c *Client) GetTorrents() ([]Torrent, error) {
 
 // GetSession gets the current session from transmission
 func (c *Client) GetSession() (*Session, error) {
-	var cmd SessionCommand
-
 	req, err := json.Marshal(SessionCommand{Method: "session-get"})
 	if err != nil {
 		return nil, err
@@ -167,9 +165,30 @@ func (c *Client) GetSession() (*Session, error) {
 		return nil, err
 	}
 
+	var cmd SessionCommand
 	if err := json.Unmarshal(resp, &cmd); err != nil {
 		return nil, err
 	}
 
 	return &cmd.Session, nil
+}
+
+// GetSessionStats gets stats on the current & cumulative session
+func (c *Client) GetSessionStats() (*SessionStats, error) {
+	req, err := json.Marshal(SessionCommand{Method: "session-stats"})
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.post(req)
+	if err != nil {
+		return nil, err
+	}
+
+	var cmd SessionStatsCmd
+	if err := json.Unmarshal(resp, &cmd); err != nil {
+		return nil, err
+	}
+
+	return &cmd.SessionStats, nil
 }

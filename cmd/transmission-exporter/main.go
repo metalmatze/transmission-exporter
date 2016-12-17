@@ -47,6 +47,7 @@ func main() {
 
 	prometheus.MustRegister(NewTorrentCollector(client))
 	prometheus.MustRegister(NewSessionCollector(client))
+	prometheus.MustRegister(NewSessionStatsCollector(client))
 
 	http.Handle(c.WebPath, prometheus.Handler())
 
