@@ -33,53 +33,55 @@ type TorrentCollector struct {
 
 // NewTorrentCollector creates a new torrent collector with the transmission.Client
 func NewTorrentCollector(client *transmission.Client) *TorrentCollector {
+	const collectorNamespace = "torrent_"
+
 	return &TorrentCollector{
 		client: client,
 
 		Status: prometheus.NewDesc(
-			namespace+"torrent_status",
+			namespace+collectorNamespace+"status",
 			"Status of a torrent",
 			[]string{"id", "name"},
 			nil,
 		),
 		Added: prometheus.NewDesc(
-			namespace+"torrent_added",
+			namespace+collectorNamespace+"added",
 			"The unixtime time a torrent was added",
 			[]string{"id", "name"},
 			nil,
 		),
 		Files: prometheus.NewDesc(
-			namespace+"torrent_files_total",
+			namespace+collectorNamespace+"files_total",
 			"The unixtime time a torrent was added",
 			[]string{"id", "name"},
 			nil,
 		),
 		Finished: prometheus.NewDesc(
-			namespace+"torrent_finished",
+			namespace+collectorNamespace+"finished",
 			"Indicates if a torrent is finished (1) or not (0)",
 			[]string{"id", "name"},
 			nil,
 		),
 		Done: prometheus.NewDesc(
-			namespace+"torrent_done",
+			namespace+collectorNamespace+"done",
 			"The percent of a torrent being done",
 			[]string{"id", "name"},
 			nil,
 		),
 		Ratio: prometheus.NewDesc(
-			namespace+"torrent_ratio",
+			namespace+collectorNamespace+"ratio",
 			"The upload ratio of a torrent",
 			[]string{"id", "name"},
 			nil,
 		),
 		Download: prometheus.NewDesc(
-			namespace+"torrent_download_bytes",
+			namespace+collectorNamespace+"download_bytes",
 			"The current download rate of a torrent in bytes",
 			[]string{"id", "name"},
 			nil,
 		),
 		Upload: prometheus.NewDesc(
-			namespace+"torrent_upload_bytes",
+			namespace+collectorNamespace+"upload_bytes",
 			"The current upload rate of a torrent in bytes",
 			[]string{"id", "name"},
 			nil,
@@ -87,19 +89,19 @@ func NewTorrentCollector(client *transmission.Client) *TorrentCollector {
 
 		// TrackerStats
 		Downloads: prometheus.NewDesc(
-			namespace+"torrent_downloads_total",
+			namespace+collectorNamespace+"downloads_total",
 			"How often this torrent was downloaded",
 			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		Leechers: prometheus.NewDesc(
-			namespace+"torrent_leechers",
+			namespace+collectorNamespace+"leechers",
 			"The number of peers downloading this torrent",
 			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		Seeders: prometheus.NewDesc(
-			namespace+"torrent_seeders",
+			namespace+collectorNamespace+"seeders",
 			"The number of peers uploading this torrent",
 			[]string{"id", "name", "tracker"},
 			nil,

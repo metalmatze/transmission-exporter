@@ -8,8 +8,6 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
-const collectorNamespace = "session_stats_"
-
 // SessionStatsCollector exposes SessionStats as metrics
 type SessionStatsCollector struct {
 	client *transmission.Client
@@ -29,6 +27,8 @@ type SessionStatsCollector struct {
 
 // NewSessionStatsCollector takes a transmission.Client and returns a SessionStatsCollector
 func NewSessionStatsCollector(client *transmission.Client) *SessionStatsCollector {
+	const collectorNamespace = "session_stats_"
+
 	return &SessionStatsCollector{
 		client: client,
 
