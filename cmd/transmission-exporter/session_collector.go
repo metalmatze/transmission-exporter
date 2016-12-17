@@ -7,6 +7,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
+// SessionCollector exposes session metrics
 type SessionCollector struct {
 	client *transmission.Client
 
@@ -24,6 +25,7 @@ type SessionCollector struct {
 	Version          *prometheus.Desc
 }
 
+// NewSessionCollector takes a transmission.Client and returns a SessionCollector
 func NewSessionCollector(client *transmission.Client) *SessionCollector {
 	return &SessionCollector{
 		client: client,
