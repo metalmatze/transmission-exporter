@@ -152,3 +152,24 @@ func (c *Client) GetTorrents() ([]Torrent, error) {
 
 	return out.Arguments.Torrents, nil
 }
+
+// GetSession gets the current session from transmission
+func (c *Client) GetSession() (*Session, error) {
+	var cmd SessionCommand
+
+	req, err := json.Marshal(SessionCommand{Method: "session-get"})
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.post(req)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal(resp, &cmd); err != nil {
+		return nil, err
+	}
+
+	return &cmd.Session, nil
+}

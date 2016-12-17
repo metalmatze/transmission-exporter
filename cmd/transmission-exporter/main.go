@@ -46,6 +46,7 @@ func main() {
 	client := transmission.New(c.TransmissionAddr, user)
 
 	prometheus.MustRegister(NewTorrentCollector(client))
+	prometheus.MustRegister(NewSessionCollector(client))
 
 	http.Handle(c.WebPath, prometheus.Handler())
 
@@ -60,4 +61,11 @@ func main() {
 	})
 
 	log.Fatal(http.ListenAndServe(c.WebAddr, nil))
+}
+
+func boolToString(true bool) string {
+	if true {
+		return "1"
+	}
+	return "0"
 }
