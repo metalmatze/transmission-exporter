@@ -88,19 +88,19 @@ func NewTorrentCollector(client *transmission.Client) *TorrentCollector {
 		// TrackerStats
 		Downloads: prometheus.NewDesc(
 			namespace+"torrent_downloads_total",
-			"",
+			"How often this torrent was downloaded",
 			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		Leechers: prometheus.NewDesc(
 			namespace+"torrent_leechers",
-			"",
+			"The number of peers downloading this torrent",
 			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		Seeders: prometheus.NewDesc(
 			namespace+"torrent_seeders",
-			"",
+			"The number of peers uploading this torrent",
 			[]string{"id", "name", "tracker"},
 			nil,
 		),
@@ -109,7 +109,17 @@ func NewTorrentCollector(client *transmission.Client) *TorrentCollector {
 
 // Describe implements the prometheus.Collector interface
 func (tc *TorrentCollector) Describe(ch chan<- *prometheus.Desc) {
+	ch <- tc.Status
+	ch <- tc.Added
+	ch <- tc.Files
+	ch <- tc.Finished
+	ch <- tc.Done
 	ch <- tc.Ratio
+	ch <- tc.Download
+	ch <- tc.Upload
+	ch <- tc.Downloads
+	ch <- tc.Leechers
+	ch <- tc.Seeders
 }
 
 // Collect implements the prometheus.Collector interface
