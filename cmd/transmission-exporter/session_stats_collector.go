@@ -112,9 +112,6 @@ func (sc *SessionStatsCollector) Collect(ch chan<- prometheus.Metric) {
 		log.Printf("failed to get session stats: %v", err)
 	}
 
-	dur := time.Duration(stats.CurrentStats.SecondsActive) * time.Second
-	timestamp := time.Now().Add(-1 * dur).Unix()
-
 	ch <- prometheus.MustNewConstMetric(
 		sc.DownloadSpeed,
 		prometheus.GaugeValue,
@@ -143,24 +140,35 @@ func (sc *SessionStatsCollector) Collect(ch chan<- prometheus.Metric) {
 
 	types := []string{"current", "cumulative"}
 	for _, t := range types {
+		var stateStats transmission.SessionStateStats
+		if t == types[0] {
+			stateStats = stats.CurrentStats
+		} else {
+			stateStats = stats.CumulativeStats
+		}
+
 		ch <- prometheus.MustNewConstMetric(
 			sc.Downloaded,
 			prometheus.GaugeValue,
-			float64(stats.CurrentStats.DownloadedBytes),
+			float64(stateStats.DownloadedBytes),
 			t,
 		)
 		ch <- prometheus.MustNewConstMetric(
 			sc.Uploaded,
 			prometheus.GaugeValue,
-			float64(stats.CurrentStats.UploadedBytes),
+			float64(stateStats.UploadedBytes),
 			t,
 		)
 		ch <- prometheus.MustNewConstMetric(
 			sc.FilesAdded,
 			prometheus.GaugeValue,
-			float64(stats.CurrentStats.FilesAdded),
+			float64(stateStats.FilesAdded),
 			t,
 		)
+
+		dur := time.Duration(stateStats.SecondsActive) * time.Second
+		timestamp := time.Now().Add(-1 * dur).Unix()
+
 		ch <- prometheus.MustNewConstMetric(
 			sc.ActiveTime,
 			prometheus.GaugeValue,
@@ -170,7 +178,7 @@ func (sc *SessionStatsCollector) Collect(ch chan<- prometheus.Metric) {
 		ch <- prometheus.MustNewConstMetric(
 			sc.SessionCount,
 			prometheus.GaugeValue,
-			float64(stats.CurrentStats.SessionCount),
+			float64(stateStats.SessionCount),
 			t,
 		)
 	}
