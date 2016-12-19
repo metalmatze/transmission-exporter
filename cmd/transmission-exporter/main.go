@@ -5,21 +5,27 @@ import (
 	"net/http"
 
 	arg "github.com/alexflint/go-arg"
+	"github.com/joho/godotenv"
 	transmission "github.com/metalmatze/transmission-exporter"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
 // Config gets its content from env and passes it on to different packages
 type Config struct {
-	WebPath              string `arg:"env:WEB_PATH"`
-	WebAddr              string `arg:"env:WEB_ADDR"`
 	TransmissionAddr     string `arg:"env:TRANSMISSION_ADDR"`
-	TransmissionUsername string `arg:"env:TRANSMISSION_USERNAME"`
 	TransmissionPassword string `arg:"env:TRANSMISSION_PASSWORD"`
+	TransmissionUsername string `arg:"env:TRANSMISSION_USERNAME"`
+	WebAddr              string `arg:"env:WEB_ADDR"`
+	WebPath              string `arg:"env:WEB_PATH"`
 }
 
 func main() {
 	log.Println("starting transmission-exporter")
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("no .env present")
+	}
 
 	c := Config{
 		WebPath:          "/metrics",
@@ -40,8 +46,11 @@ func main() {
 	client := transmission.New(c.TransmissionAddr, user)
 
 	prometheus.MustRegister(NewTorrentCollector(client))
+	prometheus.MustRegister(NewSessionCollector(client))
+	prometheus.MustRegister(NewSessionStatsCollector(client))
 
 	http.Handle(c.WebPath, prometheus.Handler())
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`<html>
 			<head><title>Node Exporter</title></head>
@@ -53,4 +62,11 @@ func main() {
 	})
 
 	log.Fatal(http.ListenAndServe(c.WebAddr, nil))
+}
+
+func boolToString(true bool) string {
+	if true {
+		return "1"
+	}
+	return "0"
 }

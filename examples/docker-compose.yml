@@ -5,6 +5,7 @@ transmission:
     - "127.0.0.1:9091:9091"
     - "51413:51413"
     - "51413:51413/udp"
+
 transmission-exporter:
   image: metalmatze/transmission-exporter
   restart: always
@@ -14,3 +15,13 @@ transmission-exporter:
     - "127.0.0.1:19091:19091"
   environment:
     TRANSMISSION_ADDR: http://transmission:9091
+
+prometheus:
+  image: quay.io/prometheus/prometheus
+  command: "-config.file=/etc/prometheus/prometheus.yml"
+  links:
+    - transmission-exporter
+  ports:
+    - "127.0.0.1:9090:9090"
+  volumes:
+    - "./prometheus:/etc/prometheus/"
