@@ -24,7 +24,7 @@ type (
 		//Config_dir                   string `json:"config-dir"`
 		//Dht_enabled                  bool   `json:"dht-enabled"`
 		DownloadDir          string `json:"download-dir"`
-		DownloadDirFreeSpace int    `json:"download-dir-free-space"`
+		DownloadDirFreeSpace uint64 `json:"download-dir-free-space"`
 		DownloadQueueEnabled bool   `json:"download-queue-enabled"`
 		DownloadQueueSize    int    `json:"download-queue-size"`
 		//Encryption                 string `json:"encryption"`
@@ -46,14 +46,14 @@ type (
 		//RPC_version_minimum          int    `json:"rpc-version-minimum"`
 		//Script_torrent_done_enabled  bool   `json:"script-torrent-done-enabled"`
 		//Script_torrent_done_filename string `json:"script-torrent-done-filename"`
-		SeedQueueEnabled      bool `json:"seed-queue-enabled"`
-		SeedQueueSize         int  `json:"seed-queue-size"`
-		SeedRatioLimit        int  `json:"seedRatioLimit"`
-		SeedRatioLimited      bool `json:"seedRatioLimited"`
-		SpeedLimitDown        int  `json:"speed-limit-down"`
-		SpeedLimitDownEnabled bool `json:"speed-limit-down-enabled"`
-		SpeedLimitUp          int  `json:"speed-limit-up"`
-		SpeedLimitUpEnabled   bool `json:"speed-limit-up-enabled"`
+		SeedQueueEnabled      bool    `json:"seed-queue-enabled"`
+		SeedQueueSize         int     `json:"seed-queue-size"`
+		SeedRatioLimit        float64 `json:"seedRatioLimit"`
+		SeedRatioLimited      bool    `json:"seedRatioLimited"`
+		SpeedLimitDown        int     `json:"speed-limit-down"`
+		SpeedLimitDownEnabled bool    `json:"speed-limit-down-enabled"`
+		SpeedLimitUp          int     `json:"speed-limit-up"`
+		SpeedLimitUpEnabled   bool    `json:"speed-limit-up-enabled"`
 		//Start_added_torrents         bool   `json:"start-added-torrents"`
 		//Trash_original_torrent_files bool   `json:"trash-original-torrent-files"`
 		//Utp_enabled                  bool   `json:"utp-enabled"`
