@@ -15,6 +15,7 @@ pipeline:
   docker:
     image: plugins/docker
     repo: metalmatze/transmission-exporter
+    secrets: [ docker_username, docker_password ]
     tags:
       - latest
     when:
@@ -24,7 +25,7 @@ pipeline:
   docker:
     image: plugins/docker
     repo: metalmatze/transmission-exporter
-    tags: [ '${TAG}' ]
+    secrets: [ docker_username, docker_password ]
+    tag: [ 0.2 ]
     when:
-      event: [ tag ]
-      branch: [ refs/tags/* ]
+      event: tag
