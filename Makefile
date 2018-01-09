@@ -9,11 +9,11 @@ clean:
 
 .PHONY: install
 install:
-	go install ./cmd/transmission-exporter
+	go install -v ./cmd/transmission-exporter
 
 .PHONY: build
 build:
-	go build ./cmd/transmission-exporter
+	go build -v ./cmd/transmission-exporter
 
 .PHONY: fmt
 fmt:
