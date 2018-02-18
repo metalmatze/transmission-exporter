@@ -190,7 +190,17 @@ func (tc *TorrentCollector) Collect(ch chan<- prometheus.Metric) {
 			id, t.Name,
 		)
 
+		tstats := make(map[string]transmission.TrackerStat)
+
 		for _, tracker := range t.TrackerStats {
+			if tr, exists := tstats[tracker.Host]; exists {
+				tr.DownloadCount += tracker.DownloadCount
+			} else {
+				tstats[tracker.Host] = tracker
+			}
+		}
+
+		for _, tracker := range tstats {
 			ch <- prometheus.MustNewConstMetric(
 				tc.Downloads,
 				prometheus.GaugeValue,
