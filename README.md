@@ -1,6 +1,6 @@
 # Transmission Exporter for Prometheus [![Build Status](https://drone.github.matthiasloibl.com/api/badges/metalmatze/transmission-exporter/status.svg)](https://drone.github.matthiasloibl.com/metalmatze/transmission-exporter)
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/metalmatze/transmisson-exporter.svg?maxAge=604800)](https://hub.docker.com/r/metalmatze/transmission-exporter)
+[![Docker Pulls](https://img.shields.io/docker/pulls/metalmatze/transmission-exporter.svg?maxAge=604800)](https://hub.docker.com/r/metalmatze/transmission-exporter)
 [![Go Report Card](https://goreportcard.com/badge/github.com/metalmatze/transmission-exporter)](https://goreportcard.com/report/github.com/metalmatze/transmission-exporter)
 
 Prometheus exporter for [Transmission](https://transmissionbt.com/) metrics, written in Go.
