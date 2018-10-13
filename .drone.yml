@@ -11,8 +11,6 @@ pipeline:
       - make vet
       - make lint
       - make build
-    environment:
-      - GO111MODULE=on
 
   docker:
     image: plugins/docker

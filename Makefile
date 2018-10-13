@@ -1,3 +1,4 @@
+GO ?= GO111MODULE=on CGO_ENABLED=0 go
 PACKAGES = $(shell go list ./... | grep -v /vendor/)
 
 .PHONY: all
@@ -5,27 +6,27 @@ all: install
 
 .PHONY: clean
 clean:
-	go clean -i ./...
+	$(GO) clean -i ./...
 
 .PHONY: install
 install:
-	go install -v ./cmd/transmission-exporter
+	$(GO) install -v ./cmd/transmission-exporter
 
 .PHONY: build
 build:
-	go build -v ./cmd/transmission-exporter
+	$(GO) build -v ./cmd/transmission-exporter
 
 .PHONY: fmt
 fmt:
-	go fmt $(PACKAGES)
+	$(GO) fmt $(PACKAGES)
 
 .PHONY: vet
 vet:
-	go vet $(PACKAGES)
+	$(GO) vet $(PACKAGES)
 
 .PHONY: lint
 lint:
 	@which golint > /dev/null; if [ $$? -ne 0 ]; then \
-		go get -u github.com/golang/lint/golint; \
+		$(GO) get -u github.com/golang/lint/golint; \
 	fi
 	for PKG in $(PACKAGES); do golint -set_exit_status $$PKG || exit 1; done;
