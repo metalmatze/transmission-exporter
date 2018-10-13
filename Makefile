@@ -30,3 +30,8 @@ lint:
 		$(GO) get -u github.com/golang/lint/golint; \
 	fi
 	for PKG in $(PACKAGES); do golint -set_exit_status $$PKG || exit 1; done;
+
+.PHONY: dashboards
+dashboards:
+	jsonnet fmt -i dashboards/transmission.jsonnet
+	jsonnet -J dashboards/vendor -m dashboards -e "(import 'dashboards/transmission.jsonnet').grafanaDashboards"
