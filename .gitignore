@@ -1,4 +1,6 @@
 /.env
+/dashboards/jsonnetfile.lock.json
+/dashboards/vendor/
 /transmission-exporter
 
 *.o
