@@ -4,7 +4,7 @@ workspace:
 
 pipeline:
   build:
-    image: golang:alpine
+    image: golang:1.11-alpine
     commands:
       - apk add -U git make
       - make fmt
