@@ -21,7 +21,7 @@ type (
 	// TorrentArgumentsAdded specifies the torrent to get added data from
 	TorrentArgumentsAdded struct {
 		HashString string `json:"hashString"`
-		ID         int    `json:"id"`
+		ID         int64  `json:"id"`
 		Name       string `json:"name"`
 	}
 
@@ -60,16 +60,16 @@ type (
 
 	// File is a file contained inside a torrent
 	File struct {
-		BytesCompleted int    `json:"bytesCompleted"`
-		Length         int    `json:"length"`
+		BytesCompleted int64  `json:"bytesCompleted"`
+		Length         int64  `json:"length"`
 		Name           string `json:"name"`
 	}
 
 	// FileStat describe a file's priority & if it's wanted
 	FileStat struct {
-		BytesCompleted int  `json:"bytesCompleted"`
-		Priority       int  `json:"priority"`
-		Wanted         bool `json:"wanted"`
+		BytesCompleted int64 `json:"bytesCompleted"`
+		Priority       int   `json:"priority"`
+		Wanted         bool  `json:"wanted"`
 	}
 
 	// TrackerStat has stats about the torrent's tracker

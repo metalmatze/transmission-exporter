@@ -9,8 +9,8 @@ type (
 
 	// SessionStats contains information about the current & cumulative session
 	SessionStats struct {
-		DownloadSpeed      int               `json:"downloadSpeed"`
-		UploadSpeed        int               `json:"uploadSpeed"`
+		DownloadSpeed      int64             `json:"downloadSpeed"`
+		UploadSpeed        int64             `json:"uploadSpeed"`
 		ActiveTorrentCount int               `json:"activeTorrentCount"`
 		PausedTorrentCount int               `json:"pausedTorrentCount"`
 		TorrentCount       int               `json:"torrentCount"`
@@ -19,10 +19,10 @@ type (
 	}
 	// SessionStateStats contains current or cumulative session stats
 	SessionStateStats struct {
-		DownloadedBytes int `json:"downloadedBytes"`
-		UploadedBytes   int `json:"uploadedBytes"`
-		FilesAdded      int `json:"filesAdded"`
-		SecondsActive   int `json:"secondsActive"`
-		SessionCount    int `json:"sessionCount"`
+		DownloadedBytes int64 `json:"downloadedBytes"`
+		UploadedBytes   int64 `json:"uploadedBytes"`
+		FilesAdded      int64 `json:"filesAdded"`
+		SecondsActive   int64 `json:"secondsActive"`
+		SessionCount    int64 `json:"sessionCount"`
 	}
 )
