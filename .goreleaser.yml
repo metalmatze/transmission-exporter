@@ -17,7 +17,6 @@ builds:
 dockers:
   - binaries:
     - transmission-exporter
-    # Templates of the Docker image names.
     image_templates:
     - "metalmatze/transmission-exporter:latest"
     - "metalmatze/transmission-exporter:{{ .Tag }}"
