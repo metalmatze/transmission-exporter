@@ -20,3 +20,4 @@ _testmain.go
 *.test
 *.prof
 *.out
+dist
