@@ -22,17 +22,16 @@ steps:
   - make build
 
 - name: docker-master
-  pull: default
+  pull: always
   image: plugins/docker
   settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
     repo: metalmatze/transmission-exporter
     tags:
     - master
-  environment:
-    DOCKER_PASSWORD:
-      from_secret: docker_password
-    DOCKER_USERNAME:
-      from_secret: docker_username
   when:
     branch:
     - master
@@ -40,19 +39,18 @@ steps:
     - push
 
 - name: docker-tag
-  pull: default
+  pull: always
   image: plugins/docker
   settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
     repo: metalmatze/transmission-exporter
     tag:
     - 0.2
     - 0.2.1
     - latest
-  environment:
-    DOCKER_PASSWORD:
-      from_secret: docker_password
-    DOCKER_USERNAME:
-      from_secret: docker_username
   when:
     event:
     - tag
