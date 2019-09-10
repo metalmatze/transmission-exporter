@@ -50,8 +50,8 @@ steps:
       from_secret: docker_password
     repo: metalmatze/transmission-exporter
     tag:
-    - 0.2
-    - 0.2.1
+    - 0.3
+    - 0.3.0
     - latest
   when:
     event:
