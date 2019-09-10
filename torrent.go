@@ -31,7 +31,7 @@ type (
 		Name          string        `json:"name"`
 		Status        int           `json:"status"`
 		Added         int           `json:"addedDate"`
-		LeftUntilDone int           `json:"leftUntilDone"`
+		LeftUntilDone int64         `json:"leftUntilDone"`
 		Eta           int           `json:"eta"`
 		UploadRatio   float64       `json:"uploadRatio"`
 		RateDownload  int           `json:"rateDownload"`
