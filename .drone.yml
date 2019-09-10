@@ -1,31 +1,60 @@
+---
+kind: pipeline
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
 workspace:
   base: /go
   path: src/github.com/metalmatze/transmission-exporter
 
-pipeline:
-  build:
-    image: golang:1.11-alpine
-    commands:
-      - apk add -U git make
-      - make fmt
-      - make vet
-      - make lint
-      - make build
+steps:
+- name: build
+  pull: default
+  image: golang:1.11-alpine
+  commands:
+  - apk add -U git make
+  - make fmt
+  - make vet
+  - make lint
+  - make build
 
-  docker:
-    image: plugins/docker
+- name: docker-master
+  pull: default
+  image: plugins/docker
+  settings:
     repo: metalmatze/transmission-exporter
-    secrets: [ docker_username, docker_password ]
     tags:
-      - master
-    when:
-      event: [ push ]
-      branch: [ master ]
+    - master
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: docker_password
+    DOCKER_USERNAME:
+      from_secret: docker_username
+  when:
+    branch:
+    - master
+    event:
+    - push
 
-  docker:
-    image: plugins/docker
+- name: docker-tag
+  pull: default
+  image: plugins/docker
+  settings:
     repo: metalmatze/transmission-exporter
-    secrets: [ docker_username, docker_password ]
-    tag: [ '0.2', '0.2.1', 'latest' ]
-    when:
-      event: tag
+    tag:
+    - 0.2
+    - 0.2.1
+    - latest
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: docker_password
+    DOCKER_USERNAME:
+      from_secret: docker_username
+  when:
+    event:
+    - tag
+
+...
