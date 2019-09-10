@@ -1,0 +1,114 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: transmission
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: transmission
+  namespace: transmission
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: transmission
+  template:
+    metadata:
+      labels:
+        name: transmission
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '9190'
+    spec:
+      containers:
+      - image: linuxserver/transmission
+        imagePullPolicy: Always
+        name: transmission
+        env:
+        - name: PGID
+          value: "1000"
+        - name: "PUID"
+          value: "1000"
+        - name: "TZ"
+          value: "Europe/London"
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 2000Mi
+          requests:
+            cpu: 1000m
+            memory: 1000Mi
+        ports:
+        - name: default-http
+          containerPort: 9091
+        - name: dht
+          containerPort: 51413
+        - name: dht-udp
+          containerPort: 51413
+          protocol: UDP
+        # You should assign these to some real volumes
+        # volumeMounts:
+        #   - name: downloads
+        #     mountPath: "/downloads"
+        #   - name: config
+        #     mountPath: "/config"
+      - image: metalmatze/transmission-exporter
+        name: transmission-exporter
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+          requests:
+            cpu: 50m
+            memory: 50Mi
+        ports:
+        - name: prom-scrape
+          containerPort: 9190
+        env:
+        - name: TRANSMISSION_ADDR
+          value: "http://localhost:9091"
+        #  Uncomment these once you add authentication to transmission
+        # - name: TRANSMISSION_USERNAME
+        #   value: "transmission"
+        # You can use a tool like `kontemplate` + `pass` to avoid hardcoding this in your repo
+        # - name: TRANSMISSION_PASSWORD
+        #   value: "hunter2"
+        - name: WEB_PATH
+          value: "/metrics"
+        - name: WEB_ADDR
+          value: ":9190"
+      # You should create some real PVCs for this
+      #
+      # volumes:
+      # - name: downloads
+      #   persistentVolumeClaim:
+      #     claimName: transmission-downloads
+      # - name: config
+      #   persistentVolumeClaim:
+      #     claimName: transmission-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: transmission
+  name: transmission
+spec:
+  selector:
+    name: transmission
+  ports:
+    - name: default-http
+      protocol: TCP
+      port: 80
+      targetPort: 9091
+    - name: dht
+      protocol: TCP
+      port: 51413
+      targetPort: 51413
+    - name: dht-udp
+      protocol: UDP
+      port: 51413
+      targetPort: 51413
+---

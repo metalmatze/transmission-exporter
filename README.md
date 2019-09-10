@@ -24,6 +24,20 @@ ENV Variable | Description
     docker pull metalmatze/transmission-exporter
     docker run -d -p 19091:19091 metalmatze/transmission-exporter
 
+### Kubernetes (Prometheus)
+
+A sample kubernetes manifest is available in [example/kubernetes](https://github.com/metalmatze/transmission-exporter/blob/master/examples/kubernetes/docker-compose.yml)
+
+Please run: `kubectl apply -f examples/kubernetes/transmission.yml`
+
+You should:
+* Attach the config and downloads volume
+* Configure the password for the exporter
+
+Your prometheus instance will start scraping the metrics automatically. (if configured with annotation based discovery). [more info](https://www.weave.works/docs/cloud/latest/tasks/monitor/configuration-k8s/)
+
+### Docker Compose
+
 Example `docker-compose.yml` with Transmission also running in docker.
 
     transmission:
@@ -55,5 +69,3 @@ Now you're good to go.
 ### Original authors of the Transmission package  
 Tobias Blom (https://github.com/tubbebubbe/transmission)  
 Long Nguyen (https://github.com/longnguyen11288/go-transmission)
-
-
