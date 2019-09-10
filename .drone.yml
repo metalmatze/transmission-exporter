@@ -14,6 +14,8 @@ steps:
 - name: build
   pull: default
   image: golang:1.13-alpine
+  environment:
+    GOPROXY: https://proxy.golang.org
   commands:
   - apk add -U git make
   - make fmt
