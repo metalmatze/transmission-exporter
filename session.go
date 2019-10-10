@@ -24,7 +24,7 @@ type (
 		//Config_dir                   string `json:"config-dir"`
 		//Dht_enabled                  bool   `json:"dht-enabled"`
 		DownloadDir          string `json:"download-dir"`
-		DownloadDirFreeSpace uint64 `json:"download-dir-free-space"`
+		DownloadDirFreeSpace int64  `json:"download-dir-free-space"`
 		DownloadQueueEnabled bool   `json:"download-queue-enabled"`
 		DownloadQueueSize    int    `json:"download-queue-size"`
 		//Encryption                 string `json:"encryption"`
