@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-const endpoint = "/transmission/rpc"
+const endpoint = "/transmission/rpc/"
 
 type (
 	// User to authenticate with Transmission
