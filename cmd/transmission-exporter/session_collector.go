@@ -126,6 +126,7 @@ func (sc *SessionCollector) Collect(ch chan<- prometheus.Metric) {
 	session, err := sc.client.GetSession()
 	if err != nil {
 		log.Printf("failed to get session: %v", err)
+		return
 	}
 
 	ch <- prometheus.MustNewConstMetric(
