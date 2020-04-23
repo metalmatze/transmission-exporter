@@ -1,5 +1,12 @@
 GO ?= GO111MODULE=on CGO_ENABLED=0 go
 PACKAGES = $(shell go list ./... | grep -v /vendor/)
+BUILDX ?= docker buildx
+PLATFORMS ?= linux/amd64,linux/i386,linux/arm64,linux/arm/v7
+DOCKER_IMAGE ?= kennedyoliveira/transmission-exporter
+
+ifeq ($(DOCKER_TAG),)
+	DOCKER_TAG = latest
+endif
 
 .PHONY: all
 all: install
@@ -35,3 +42,23 @@ lint:
 dashboards:
 	jsonnet fmt -i dashboards/transmission.jsonnet
 	jsonnet -J dashboards/vendor -m dashboards -e "(import 'dashboards/transmission.jsonnet').grafanaDashboards"
+
+
+.PHONE: docker-init
+docker-init:
+	@$(BUILDX) create --name transmission-exporter-builder
+	@$(BUILDX) use transmission-exporter-builder
+	@$(BUILDX) inspect --bootstrap transmission-exporter-builder
+
+.PHONE: docker-build
+docker-build: clean
+	@echo ">> building multi-arch docker images, tag=$(DOCKER_TAG)"
+	@$(BUILDX) build -f Dockerfile-cross \
+			  --platform $(PLATFORMS) \
+			  --tag $(DOCKER_IMAGE):$(DOCKER_TAG) \
+			  --push \
+			  .
+
+.PHONE: docker-clean
+docker-clean:
+	@$(BUILDX) rm transmission-exporter-builder

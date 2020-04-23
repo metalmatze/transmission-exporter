@@ -1,0 +1,12 @@
+FROM golang:alpine AS build
+ENV GOOS=linux
+ENV CGO_ENABLED=1
+WORKDIR /go/src/github.com/kennedyoliveira/transmission-exporter
+COPY ./ ./
+RUN apk add -U make
+RUN make build
+
+FROM alpine
+COPY --from=build /go/src/github.com/kennedyoliveira/transmission-exporter /bin/
+
+ENTRYPOINT [ "/bin/transmission-exporter" ]
