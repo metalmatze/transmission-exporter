@@ -1,0 +1,9 @@
+webaddr: :19091
+webpath: /metrics
+clients:
+  - name: local
+    addr: http://localhost:9091
+  - name: remote
+    addr: http://localhost:8080
+    username: admin
+    password: password

@@ -10,7 +10,7 @@ import (
 
 // SessionStatsCollector exposes SessionStats as metrics
 type SessionStatsCollector struct {
-	client *transmission.Client
+	clients []*transmission.Client
 
 	DownloadSpeed  *prometheus.Desc
 	UploadSpeed    *prometheus.Desc
@@ -26,71 +26,71 @@ type SessionStatsCollector struct {
 }
 
 // NewSessionStatsCollector takes a transmission.Client and returns a SessionStatsCollector
-func NewSessionStatsCollector(client *transmission.Client) *SessionStatsCollector {
+func NewSessionStatsCollector(clients []*transmission.Client) *SessionStatsCollector {
 	const collectorNamespace = "session_stats_"
 
 	return &SessionStatsCollector{
-		client: client,
+		clients: clients,
 
 		DownloadSpeed: prometheus.NewDesc(
 			namespace+collectorNamespace+"download_speed_bytes",
 			"Current download speed in bytes",
-			nil,
+			[]string{"client_name"},
 			nil,
 		),
 		UploadSpeed: prometheus.NewDesc(
 			namespace+collectorNamespace+"upload_speed_bytes",
 			"Current download speed in bytes",
-			nil,
+			[]string{"client_name"},
 			nil,
 		),
 		TorrentsTotal: prometheus.NewDesc(
 			namespace+collectorNamespace+"torrents_total",
 			"The total number of torrents",
-			nil,
+			[]string{"client_name"},
 			nil,
 		),
 		TorrentsActive: prometheus.NewDesc(
 			namespace+collectorNamespace+"torrents_active",
 			"The number of active torrents",
-			nil,
+			[]string{"client_name"},
 			nil,
 		),
 		TorrentsPaused: prometheus.NewDesc(
 			namespace+collectorNamespace+"torrents_paused",
 			"The number of paused torrents",
-			nil,
+			[]string{"client_name"},
 			nil,
 		),
 
 		Downloaded: prometheus.NewDesc(
 			namespace+collectorNamespace+"downloaded_bytes",
 			"The number of downloaded bytes",
-			[]string{"type"},
+			[]string{"type", "client_name"},
 			nil,
 		),
 		Uploaded: prometheus.NewDesc(
 			namespace+collectorNamespace+"uploaded_bytes",
 			"The number of uploaded bytes",
-			[]string{"type"},
+			[]string{"type", "client_name"},
 			nil,
 		),
 		FilesAdded: prometheus.NewDesc(
 			namespace+collectorNamespace+"files_added",
 			"The number of files added",
-			[]string{"type"},
+			[]string{"type", "client_name"},
 			nil,
 		),
 		ActiveTime: prometheus.NewDesc(
 			namespace+collectorNamespace+"active",
 			"The time transmission is active since",
-			[]string{"type"},
+			[]string{"type", "client_name"},
 			nil,
 		),
 		SessionCount: prometheus.NewDesc(
 			namespace+collectorNamespace+"sessions",
 			"Count of the times transmission started",
-			[]string{"type"},
+			[]string{"type", "client_name"},
 			nil,
 		),
 	}
@@ -107,79 +107,86 @@ func (sc *SessionStatsCollector) Describe(ch chan<- *prometheus.Desc) {
 
 // Collect implements the prometheus.Collector interface
 func (sc *SessionStatsCollector) Collect(ch chan<- prometheus.Metric) {
-	stats, err := sc.client.GetSessionStats()
-	if err != nil {
-		log.Printf("failed to get session stats: %v", err)
-	}
-
-	ch <- prometheus.MustNewConstMetric(
-		sc.DownloadSpeed,
-		prometheus.GaugeValue,
-		float64(stats.DownloadSpeed),
-	)
-	ch <- prometheus.MustNewConstMetric(
-		sc.UploadSpeed,
-		prometheus.GaugeValue,
-		float64(stats.UploadSpeed),
-	)
-	ch <- prometheus.MustNewConstMetric(
-		sc.TorrentsTotal,
-		prometheus.GaugeValue,
-		float64(stats.TorrentCount),
-	)
-	ch <- prometheus.MustNewConstMetric(
-		sc.TorrentsActive,
-		prometheus.GaugeValue,
-		float64(stats.ActiveTorrentCount),
-	)
-	ch <- prometheus.MustNewConstMetric(
-		sc.TorrentsPaused,
-		prometheus.GaugeValue,
-		float64(stats.PausedTorrentCount),
-	)
-
-	types := []string{"current", "cumulative"}
-	for _, t := range types {
-		var stateStats transmission.SessionStateStats
-		if t == types[0] {
-			stateStats = stats.CurrentStats
-		} else {
-			stateStats = stats.CumulativeStats
+	for _, client := range sc.clients {
+		stats, err := client.GetSessionStats()
+		if err != nil {
+			log.Printf("failed to get session stats: %v", err)
 		}
 
 		ch <- prometheus.MustNewConstMetric(
-			sc.Downloaded,
+			sc.DownloadSpeed,
 			prometheus.GaugeValue,
-			float64(stateStats.DownloadedBytes),
-			t,
+			float64(stats.DownloadSpeed),
+			client.Name,
 		)
 		ch <- prometheus.MustNewConstMetric(
-			sc.Uploaded,
+			sc.UploadSpeed,
 			prometheus.GaugeValue,
-			float64(stateStats.UploadedBytes),
-			t,
+			float64(stats.UploadSpeed),
+			client.Name,
 		)
 		ch <- prometheus.MustNewConstMetric(
-			sc.FilesAdded,
+			sc.TorrentsTotal,
 			prometheus.GaugeValue,
-			float64(stateStats.FilesAdded),
-			t,
+			float64(stats.TorrentCount),
+			client.Name,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			sc.TorrentsActive,
+			prometheus.GaugeValue,
+			float64(stats.ActiveTorrentCount),
+			client.Name,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			sc.TorrentsPaused,
+			prometheus.GaugeValue,
+			float64(stats.PausedTorrentCount),
+			client.Name,
 		)
 
-		dur := time.Duration(stateStats.SecondsActive) * time.Second
-		timestamp := time.Now().Add(-1 * dur).Unix()
+		types := []string{"current", "cumulative"}
+		for _, t := range types {
+			var stateStats transmission.SessionStateStats
+			if t == types[0] {
+				stateStats = stats.CurrentStats
+			} else {
+				stateStats = stats.CumulativeStats
+			}
 
-		ch <- prometheus.MustNewConstMetric(
-			sc.ActiveTime,
-			prometheus.GaugeValue,
-			float64(timestamp),
-			t,
-		)
-		ch <- prometheus.MustNewConstMetric(
-			sc.SessionCount,
-			prometheus.GaugeValue,
-			float64(stateStats.SessionCount),
-			t,
-		)
+			ch <- prometheus.MustNewConstMetric(
+				sc.Downloaded,
+				prometheus.GaugeValue,
+				float64(stateStats.DownloadedBytes),
+				t, client.Name,
+			)
+			ch <- prometheus.MustNewConstMetric(
+				sc.Uploaded,
+				prometheus.GaugeValue,
+				float64(stateStats.UploadedBytes),
+				t, client.Name,
+			)
+			ch <- prometheus.MustNewConstMetric(
+				sc.FilesAdded,
+				prometheus.GaugeValue,
+				float64(stateStats.FilesAdded),
+				t, client.Name,
+			)
+
+			dur := time.Duration(stateStats.SecondsActive) * time.Second
+			timestamp := time.Now().Add(-1 * dur).Unix()
+
+			ch <- prometheus.MustNewConstMetric(
+				sc.ActiveTime,
+				prometheus.GaugeValue,
+				float64(timestamp),
+				t, client.Name,
+			)
+			ch <- prometheus.MustNewConstMetric(
+				sc.SessionCount,
+				prometheus.GaugeValue,
+				float64(stateStats.SessionCount),
+				t, client.Name,
+			)
+		}
 	}
 }
