@@ -110,7 +110,8 @@ func (sc *SessionStatsCollector) Collect(ch chan<- prometheus.Metric) {
 	for _, client := range sc.clients {
 		stats, err := client.GetSessionStats()
 		if err != nil {
-			log.Printf("failed to get session stats: %v", err)
+			log.Printf("failed to get session stats, client: %v, error: %v", client.Name, err)
+			continue
 		}
 
 		ch <- prometheus.MustNewConstMetric(

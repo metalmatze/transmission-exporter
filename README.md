@@ -18,8 +18,8 @@ ENV Variable | Description
 | TRANSMISSION_ADDR | Transmission address to connect with, default: `http://localhost:9091` |
 | TRANSMISSION_USERNAME | Transmission username, no default |
 | TRANSMISSION_PASSWORD | Transmission password, no default |
-| Client_Name | Transmission client name, this value will be should in each metric item, default: equal to TRANSMISSION_ADDR |
-| Config_File | Transmission-exporter's config file path, no default |
+| CLIENT_NAME | Transmission client name, this value will be should in each metric item, default: equal to TRANSMISSION_ADDR |
+| CONFIG_FILE | Transmission-exporter's config file path, no default |
 
 ### Config file
 

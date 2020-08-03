@@ -131,8 +131,8 @@ func (tc *TorrentCollector) Collect(ch chan<- prometheus.Metric) {
 
 		torrents, err := client.GetTorrents()
 		if err != nil {
-			log.Printf("failed to get torrents: %v", err)
-			return
+			log.Printf("failed to get torrents, client: %v, error: %v", client.Name, err)
+			continue
 		}
 
 		for _, t := range torrents {
