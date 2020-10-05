@@ -92,7 +92,7 @@ type (
 		LastScrapeStartTime   int    `json:"lastScrapeStartTime"`
 		LastScrapeSucceeded   bool   `json:"lastScrapeSucceeded"`
 		LastScrapeTime        int    `json:"lastScrapeTime"`
-		LastScrapeTimedOut    int    `json:"lastScrapeTimedOut"`
+		LastScrapeTimedOut    bool   `json:"lastScrapeTimedOut"`
 		LeecherCount          int    `json:"leecherCount"`
 		NextAnnounceTime      int    `json:"nextAnnounceTime"`
 		NextScrapeTime        int    `json:"nextScrapeTime"`
