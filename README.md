@@ -5,6 +5,10 @@
 
 Prometheus exporter for [Transmission](https://transmissionbt.com/) metrics, written in Go.
 
+# LOOKING FOR MAINTAINERS
+I don't use this exporter anymore and I'd be happy if others would want to take over and maintain it in the future!  
+Write me a DM via [Twitter](https://twitter.com/metalmatze)!
+
 ### Installation
 
     $ go get github.com/metalmatze/transmission-exporter
