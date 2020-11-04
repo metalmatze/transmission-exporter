@@ -3,6 +3,7 @@ package transmission
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -46,7 +47,11 @@ func (c *Client) post(body []byte) ([]byte, error) {
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode == 409 {
+	if res.StatusCode == http.StatusUnauthorized {
+		return make([]byte, 0), errors.New("authorization failed, check your username and password and make sure the ip is whitelisted")
+	}
+
+	if res.StatusCode == http.StatusConflict {
 		c.getToken()
 		authRequest, err := c.authRequest("POST", body)
 		if err != nil {
