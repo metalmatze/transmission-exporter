@@ -27,27 +27,27 @@ type (
 
 	// Torrent represents a transmission torrent
 	Torrent struct {
-		ID            int           `json:"id"`
-		Name          string        `json:"name"`
-		Status        int           `json:"status"`
-		Added         int           `json:"addedDate"`
-		LeftUntilDone int64         `json:"leftUntilDone"`
-		Eta           int           `json:"eta"`
-		UploadRatio   float64       `json:"uploadRatio"`
-		RateDownload  int           `json:"rateDownload"`
-		RateUpload    int           `json:"rateUpload"`
-		DownloadDir   string        `json:"downloadDir"`
-		IsFinished    bool          `json:"isFinished"`
-		PercentDone   float64       `json:"percentDone"`
-		SeedRatioMode int           `json:"seedRatioMode"`
-		HashString    string        `json:"hashString"`
-		Error         int           `json:"error"`
-		ErrorString   string        `json:"errorString"`
-		Files         []File        `json:"files"`
-		FilesStats    []FileStat    `json:"fileStats"`
-		TrackerStats  []TrackerStat `json:"trackerStats"`
-		Peers         []Peer        `json:"peers"`
-		PeersGetting  int           `json:"peersGettingFromUs"`
+		ID                 int           `json:"id"`
+		Name               string        `json:"name"`
+		Status             int           `json:"status"`
+		Added              int           `json:"addedDate"`
+		LeftUntilDone      int64         `json:"leftUntilDone"`
+		Eta                int           `json:"eta"`
+		UploadRatio        float64       `json:"uploadRatio"`
+		RateDownload       int           `json:"rateDownload"`
+		RateUpload         int           `json:"rateUpload"`
+		DownloadDir        string        `json:"downloadDir"`
+		IsFinished         bool          `json:"isFinished"`
+		PercentDone        float64       `json:"percentDone"`
+		SeedRatioMode      int           `json:"seedRatioMode"`
+		HashString         string        `json:"hashString"`
+		Error              int           `json:"error"`
+		ErrorString        string        `json:"errorString"`
+		Files              []File        `json:"files"`
+		FilesStats         []FileStat    `json:"fileStats"`
+		TrackerStats       []TrackerStat `json:"trackerStats"`
+		Peers              []Peer        `json:"peers"`
+		PeersGettingFromUs int           `json:"peersGettingFromUs"`
 	}
 
 	// ByID implements the sort Interface to sort by ID

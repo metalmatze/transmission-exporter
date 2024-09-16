@@ -16,15 +16,15 @@ const (
 type TorrentCollector struct {
 	client *transmission.Client
 
-	Status   *prometheus.Desc
-	Added    *prometheus.Desc
-	Files    *prometheus.Desc
-	Finished *prometheus.Desc
-	Done     *prometheus.Desc
-	Ratio    *prometheus.Desc
-	Download *prometheus.Desc
-	Upload   *prometheus.Desc
-	PeersGetting *prometheus.Desc
+	Status             *prometheus.Desc
+	Added              *prometheus.Desc
+	Files              *prometheus.Desc
+	Finished           *prometheus.Desc
+	Done               *prometheus.Desc
+	Ratio              *prometheus.Desc
+	Download           *prometheus.Desc
+	Upload             *prometheus.Desc
+	PeersGettingFromUs *prometheus.Desc
 
 	// TrackerStats
 	Downloads *prometheus.Desc
@@ -87,8 +87,8 @@ func NewTorrentCollector(client *transmission.Client) *TorrentCollector {
 			[]string{"id", "name"},
 			nil,
 		),
-		PeersGetting: prometheus.NewDesc(
-			namespace+collectorNamespace+"peers_getting",
+		PeersGettingFromUs: prometheus.NewDesc(
+			namespace+collectorNamespace+"peers_getting_from_us",
 			"The current number of peers downloading from us",
 			[]string{"id", "name"},
 			nil,
@@ -129,7 +129,7 @@ func (tc *TorrentCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- tc.Downloads
 	ch <- tc.Leechers
 	ch <- tc.Seeders
-	ch <- tc.PeersGetting
+	ch <- tc.PeersGettingFromUs
 }
 
 // Collect implements the prometheus.Collector interface
@@ -139,7 +139,6 @@ func (tc *TorrentCollector) Collect(ch chan<- prometheus.Metric) {
 		log.Printf("failed to get torrents: %v", err)
 		return
 	}
-	log.Printf("torrent list: %v\n", torrents)
 
 	for _, t := range torrents {
 		var finished float64
@@ -199,9 +198,9 @@ func (tc *TorrentCollector) Collect(ch chan<- prometheus.Metric) {
 			id, t.Name,
 		)
 		ch <- prometheus.MustNewConstMetric(
-			tc.PeersGetting,
+			tc.PeersGettingFromUs,
 			prometheus.GaugeValue,
-			float64(t.PeersGetting),
+			float64(t.PeersGettingFromUs),
 			id, t.Name,
 		)
 
