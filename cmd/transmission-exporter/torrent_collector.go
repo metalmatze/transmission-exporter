@@ -24,7 +24,7 @@ type TorrentCollector struct {
 	Ratio    *prometheus.Desc
 	Download *prometheus.Desc
 	Upload   *prometheus.Desc
-	PeersGettingFromUs *prometheus.Desc
+	PeersGetting *prometheus.Desc
 
 	// TrackerStats
 	Downloads *prometheus.Desc
@@ -53,7 +53,7 @@ func NewTorrentCollector(client *transmission.Client) *TorrentCollector {
 		),
 		Files: prometheus.NewDesc(
 			namespace+collectorNamespace+"files_total",
-			"The unixtime time a torrent was added",
+			"The total number of files in a torrent",
 			[]string{"id", "name"},
 			nil,
 		),
@@ -87,8 +87,8 @@ func NewTorrentCollector(client *transmission.Client) *TorrentCollector {
 			[]string{"id", "name"},
 			nil,
 		),
-		PeersGettingFromUs: prometheus.NewDesc(
-			namespace+collectorNamespace+"peers-getting-from-us",
+		PeersGetting: prometheus.NewDesc(
+			namespace+collectorNamespace+"peers_getting",
 			"The current number of peers downloading from us",
 			[]string{"id", "name"},
 			nil,

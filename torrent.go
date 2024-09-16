@@ -47,7 +47,7 @@ type (
 		FilesStats    []FileStat    `json:"fileStats"`
 		TrackerStats  []TrackerStat `json:"trackerStats"`
 		Peers         []Peer        `json:"peers"`
-		PeersGettingFromUs  int `json:"peersGettingFromUs"`
+		PeersGetting  int           `json:"peersGettingFromUs"`
 	}
 
 	// ByID implements the sort Interface to sort by ID
