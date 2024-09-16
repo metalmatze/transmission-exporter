@@ -129,7 +129,7 @@ func (tc *TorrentCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- tc.Downloads
 	ch <- tc.Leechers
 	ch <- tc.Seeders
-	ch <- tc.PeersGettingFromUs
+	ch <- tc.PeersGetting
 }
 
 // Collect implements the prometheus.Collector interface
@@ -198,9 +198,9 @@ func (tc *TorrentCollector) Collect(ch chan<- prometheus.Metric) {
 			id, t.Name,
 		)
 		ch <- prometheus.MustNewConstMetric(
-			tc.PeersGettingFromUs,
+			tc.PeersGetting,
 			prometheus.GaugeValue,
-			t.PeersGettingFromUs,
+			float64(t.PeersGetting),
 			id, t.Name,
 		)
 
