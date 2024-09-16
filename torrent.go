@@ -47,6 +47,7 @@ type (
 		FilesStats         []FileStat    `json:"fileStats"`
 		TrackerStats       []TrackerStat `json:"trackerStats"`
 		Peers              []Peer        `json:"peers"`
+		PeersConnected     int           `json:"peersConnected"`
 		PeersGettingFromUs int           `json:"peersGettingFromUs"`
 		TotalSize          int           `json:"totalSize"`
 	}
