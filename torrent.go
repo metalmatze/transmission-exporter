@@ -50,6 +50,7 @@ type (
 		PeersConnected     int           `json:"peersConnected"`
 		PeersGettingFromUs int           `json:"peersGettingFromUs"`
 		TotalSize          int           `json:"totalSize"`
+		UploadedEver       int           `json:"uploadedEver"`
 	}
 
 	// ByID implements the sort Interface to sort by ID
