@@ -48,6 +48,7 @@ type (
 		TrackerStats       []TrackerStat `json:"trackerStats"`
 		Peers              []Peer        `json:"peers"`
 		PeersGettingFromUs int           `json:"peersGettingFromUs"`
+		TotalSize          int           `json:"totalSize"`
 	}
 
 	// ByID implements the sort Interface to sort by ID

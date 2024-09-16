@@ -137,6 +137,7 @@ func (c *Client) GetTorrents() ([]Torrent, error) {
 				"trackers",
 				"trackerStats",
 				"peersGettingFromUs",
+				"totalSize",
 			},
 		},
 	}
