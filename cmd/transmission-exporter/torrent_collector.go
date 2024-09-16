@@ -16,14 +16,18 @@ const (
 type TorrentCollector struct {
 	client *transmission.Client
 
-	Status   *prometheus.Desc
-	Added    *prometheus.Desc
-	Files    *prometheus.Desc
-	Finished *prometheus.Desc
-	Done     *prometheus.Desc
-	Ratio    *prometheus.Desc
-	Download *prometheus.Desc
-	Upload   *prometheus.Desc
+	Status             *prometheus.Desc
+	Added              *prometheus.Desc
+	Files              *prometheus.Desc
+	Finished           *prometheus.Desc
+	Done               *prometheus.Desc
+	Ratio              *prometheus.Desc
+	Download           *prometheus.Desc
+	Upload             *prometheus.Desc
+	PeersConnected     *prometheus.Desc
+	PeersGettingFromUs *prometheus.Desc
+	TotalSize          *prometheus.Desc
+	UploadedEver       *prometheus.Desc
 
 	// TrackerStats
 	Downloads *prometheus.Desc
@@ -52,7 +56,7 @@ func NewTorrentCollector(client *transmission.Client) *TorrentCollector {
 		),
 		Files: prometheus.NewDesc(
 			namespace+collectorNamespace+"files_total",
-			"The unixtime time a torrent was added",
+			"The total number of files in a torrent",
 			[]string{"id", "name"},
 			nil,
 		),
@@ -83,6 +87,30 @@ func NewTorrentCollector(client *transmission.Client) *TorrentCollector {
 		Upload: prometheus.NewDesc(
 			namespace+collectorNamespace+"upload_bytes",
 			"The current upload rate of a torrent in bytes",
+			[]string{"id", "name"},
+			nil,
+		),
+		PeersConnected: prometheus.NewDesc(
+			namespace+collectorNamespace+"peers_connected",
+			"The current number of peers connected to us",
+			[]string{"id", "name"},
+			nil,
+		),
+		PeersGettingFromUs: prometheus.NewDesc(
+			namespace+collectorNamespace+"peers_getting_from_us",
+			"The current number of peers downloading from us",
+			[]string{"id", "name"},
+			nil,
+		),
+		TotalSize: prometheus.NewDesc(
+			namespace+collectorNamespace+"total_size",
+			"The total size of the torrent",
+			[]string{"id", "name"},
+			nil,
+		),
+		UploadedEver: prometheus.NewDesc(
+			namespace+collectorNamespace+"uploaded_ever",
+			"The total uploaded of the torrent",
 			[]string{"id", "name"},
 			nil,
 		),
@@ -122,6 +150,10 @@ func (tc *TorrentCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- tc.Downloads
 	ch <- tc.Leechers
 	ch <- tc.Seeders
+	ch <- tc.PeersConnected
+	ch <- tc.PeersGettingFromUs
+	ch <- tc.TotalSize
+	ch <- tc.UploadedEver
 }
 
 // Collect implements the prometheus.Collector interface
@@ -187,6 +219,30 @@ func (tc *TorrentCollector) Collect(ch chan<- prometheus.Metric) {
 			tc.Upload,
 			prometheus.GaugeValue,
 			float64(t.RateUpload),
+			id, t.Name,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			tc.PeersConnected,
+			prometheus.GaugeValue,
+			float64(t.PeersConnected),
+			id, t.Name,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			tc.PeersGettingFromUs,
+			prometheus.GaugeValue,
+			float64(t.PeersGettingFromUs),
+			id, t.Name,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			tc.TotalSize,
+			prometheus.GaugeValue,
+			float64(t.TotalSize),
+			id, t.Name,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			tc.UploadedEver,
+			prometheus.GaugeValue,
+			float64(t.UploadedEver),
 			id, t.Name,
 		)
 

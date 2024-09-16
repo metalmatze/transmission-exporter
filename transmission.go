@@ -136,6 +136,10 @@ func (c *Client) GetTorrents() ([]Torrent, error) {
 				"peers",
 				"trackers",
 				"trackerStats",
+				"peersConnected",
+				"peersGettingFromUs",
+				"totalSize",
+				"uploadedEver",
 			},
 		},
 	}
